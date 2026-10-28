@@ -1,50 +1,81 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Cadastro </title>
 </head>
+
 <body>
- 
-    <h1> Cadastro do Pet </h1>
-   
-    <label for="nomeTutor"> Nome do Tutor: </label> <br> 
-    <input type="text" id="nomeTutor" name="nomeTutor" rows="50">
-    <br> <br>
-    
-    <label for="nomePet"> Nome do Pet: </label> <br> 
+
+    <h1> Cadastre seu Pet </h1>
+
+    <label for="tipoAnimal"> Qual é o seu Pet? </label><br>
+    <input type="text" id="tipoAnimal" name="tipoAnimal">
+    <br><br>
+
+    <label for="nomePet"> Qual o nome do seu Pet? </label><br>
     <input type="text" id="nomePet" name="nomePet">
-    <br> <br> 
+    <br><br>
 
-    <label for="Idade do Pet"> Idade do Pet:</label><br> 
-    <input type="text" id="idadePet" name="idadePet">
+    <label for="Idade do Pet"> Idade (em anos):</label><br>
+    <input type="number" id="idadePet" name="idadePet">
     <br> <br>
 
-    <label for="especie"> Espécie: </label> <br> 
-    <input type="text" id=" especie" name="especie">
-    <br> <br>
-
-    <label for="raca"> Raça: </label>  <br>           
-    <input type="text" id="raca" name="raca">
-    <br> <br>
-
-    <label for="sexoPet"> Sexo do Pet: </label><br> 
+    <label for="sexoPet"> Sexo: </label><br>
     <select id="sexoPet" name="sexoPet">
         <option value=""> Selecione </option>
         <option value="macho"> Macho </option>
         <option value="femea"> Fêmea </option>
     </select>
-    <br> <br> 
+    <br> <br>
 
-    <label for="contatoTutor"> Contato do Tutor: </label> <br> 
-    <input type="tel" id="contatoTutor" name="contatoTutor">
-    <br> <br> 
+    <label for="temAlergia"> Seu Pet possui alguma alergia? </label><br>
+    <input type="radio" id="alergia-sim" name="temAlergia" value="alergia-sim">
+    <label for="alergia-sim">Sim</label>
+    <input type="radio" id="alergia-nao" name="temAlergia" value="alergia-nao">
+    <label for="alergia-nao">Não</label>
+    <br> <br>
 
-    <label for="problemaPet"> Qual o Problema: </label>
-    <BR> 
-        <textarea id="problemaPet" name="problemaPet"
-        rows="5" cols="50"></textarea>
+    <label for="possuiDoenca"> Seu Pet possui algum tipo de doença? </label><br>
+    <input type="radio" id="doenca-sim" name="possuiDoenca" value="doenca-sim">
+    <label for="doenca-sim">Sim</label>
+    <input type="radio" id="doenca-nao" name="possuiDoenca" value="doenca-nao">
+    <label for="doenca-nao">Não</label>
+    <br> <br>
+
+    <label for="castrado">Seu Pet já foi castrado?</label><br>
+    <input type="radio" id="castrado-sim" name="foiCastrado" value="castrado-sim">
+    <label for="castrado-sim">Sim</label>
+    <input type="radio" id="castrado-nao" name="foiCastrado" value="castrado-nao">
+    <label for="castrado-nao">Não</label>
+    <br><br>
+
+    <label for="pesoAnimal"> Qual é o peso do seu Pet? (em kg) </label><br>
+    <input type="number" step="0.1" id="pesoAnimal" name="pesoAnimal">
+    <br><br>
+
+ <label for="tamanhoPet"> Seu Pet é de porte: </label><br>
+    <select id="tamanhoPet" name="tamanhoPet">
+        <option value=""> Selecione </option>
+        <option value="Pequeno"> Pequeno </option>
+        <option value="Médio"> Médio </option>
+        <option value="Grande"> Grande </option>
+    </select>
+    <br> <br>
+
+     <label for="vacinouAnimal"> Quais vacinas seu pet já tomou?</label><br>
+    <input type="checkbox" id="vacinouAnimal" name="vacinouAnimal">
+    </option> Antirrábica </option>
+    <input type="checkbox" id="vacinouAnimal" name="vacinouAnimal">
+    </option> Polivalente </option>
+    <input type="checkbox" id="vacinouAnimal" name="vacinouAnimal">
+    </option> Gripe canína </option>
+    <input type="checkbox" id="vacinouAnimal" name="vacinouAnimal">
+    </option> Giárdia </option>
+    <br><br>
 
 </body>
+
 </html>
