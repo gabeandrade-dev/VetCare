@@ -1,0 +1,97 @@
+/* ==========================================================
+   topo.css - cabeçalho e menu de navegação (todas as páginas)
+   ========================================================== */
+
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.topo__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 72px;
+}
+
+/* Logo */
+.topo__logo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--cor-azul);
+  text-decoration: none;
+}
+.topo__logo-icone { width: 34px; height: 34px; }
+.topo__logo-care { color: var(--cor-verde); }
+
+/* Menu (computador) */
+.topo__menu ul {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+}
+.topo__menu a {
+  display: block;
+  padding: 0.5rem 0.95rem;
+  border-radius: 999px;
+  font-weight: 500;
+  color: var(--cor-texto);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.topo__menu a:hover { background: var(--cor-verde-claro); color: var(--cor-azul); }
+.topo__menu a.ativo { background: var(--cor-azul); color: var(--cor-branco); }
+
+/* Botão hambúrguer (escondido no computador) */
+.topo__botao {
+  display: none;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+}
+.topo__botao-linha {
+  position: absolute;
+  left: 11px;
+  width: 20px;
+  height: 2px;
+  background: var(--cor-azul);
+  border-radius: 2px;
+  transition: transform 0.25s, opacity 0.2s;
+}
+.topo__botao-linha:nth-child(1) { top: 14px; }
+.topo__botao-linha:nth-child(2) { top: 21px; }
+.topo__botao-linha:nth-child(3) { top: 28px; }
+.topo__botao[aria-expanded="true"] .topo__botao-linha:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.topo__botao[aria-expanded="true"] .topo__botao-linha:nth-child(2) { opacity: 0; }
+.topo__botao[aria-expanded="true"] .topo__botao-linha:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Celular e tablet pequeno */
+@media (max-width: 860px) {
+  .topo__botao { display: block; }
+
+  .topo__menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: var(--espaco-2) var(--espaco-3) var(--espaco-3);
+    background: var(--cor-branco);
+    border-bottom: 1px solid var(--cor-borda);
+  }
+  .topo__menu--aberto { display: block; }
+  .topo__menu ul { flex-direction: column; gap: 0.15rem; }
+  .topo__menu a { padding: 0.8rem 1rem; border-radius: 10px; }
+}
