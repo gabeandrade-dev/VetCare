@@ -1,0 +1,45 @@
+/* ==========================================================
+   padrao.css - padrões comuns a TODAS as páginas do VetCare
+   Só o que precisa ser igual: cores, fonte e base do body.
+   Layout e detalhes de cada página ficam no CSS da própria página.
+   ========================================================== */
+
+:root {
+  /* Paleta do site */
+  --cor-azul: #0e3b5c;
+  --cor-azul-medio: #2a6f97;
+  --cor-verde: #3fa66b;
+  --cor-verde-escuro: #2d8a55;
+  --cor-verde-claro: #e3f3ea;
+  --cor-fundo: #f6faf9;
+  --cor-branco: #ffffff;
+  --cor-texto: #1b2b38;
+  --cor-texto-suave: #4d6070;
+  --cor-borda: #d9e6e3;
+
+  /* Fonte do site (para trocar em todas as páginas, mude só esta linha) */
+  --fonte: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+}
+
+img, svg {
+  max-width: 100%;
+}
+
+/* Foco visível para quem navega pelo teclado */
+:focus-visible {
+  outline: 3px solid var(--cor-azul-medio);
+  outline-offset: 2px;
+}

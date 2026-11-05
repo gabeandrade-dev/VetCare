@@ -1,0 +1,11 @@
+/* ==========================================================
+   home.css - estilos da página Home (index.html)
+    CSS só do Home
+   ========================================================== */
+
+.home-container {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
