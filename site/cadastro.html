@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/padrao.css">
     <link rel="stylesheet" href="css/topo.css">
     <link rel="stylesheet" href="css/cadastro.css">
+    <link rel="stylesheet" href="css/lista.css">
 </head>
 
 <body>
@@ -154,8 +155,29 @@
 
             <div id="msg"></div>
         </form>
-
     </main>
+
+            <section class="container" id="listaCadastros">
+
+        <div class="titulo-form">
+            <span class="logo">📋</span>
+            <div>
+                <h1>Cadastros realizados</h1>
+                <p id="contador">Carregando...</p>
+            </div>
+        </div>
+
+        <div class="lista-corpo">
+            <div class="barra-busca">
+                <input type="text" id="busca" placeholder="Buscar por ID, tutor, CPF ou nome do pet">
+                <button type="button" id="btnAtualizar" class="btn btn-limpar">Atualizar</button>
+            </div>
+
+            <div id="msgLista"></div>
+            <div id="listaCards" class="cards"></div>
+        </div>
+
+    </section>
 
     <script src="js/include.js" defer></script>
     <script src="js/menu.js" defer></script>
