@@ -1,6 +1,7 @@
-#include <stdio.h> 
+#include <stdio.h>
 #include <string.h>
 
+void exportarJson();
 
 /* ---------- Limites do sistema ---------- */
 #define MAX_ANIMAIS       10
@@ -361,6 +362,9 @@ void cadastrarAnimal() {
     totalAnimais++;
     salvarAnimais();
     printf(">> Animal cadastrado com ID %d.\n", a->id);
+    salvarAnimais();
+    exportarJson();
+    printf(">> Animal cadastrado com ID %d.\n", a->id);
 }
 
 /* ---------- OPCAO 2: listar animais ---------- */
@@ -445,6 +449,8 @@ void registrarServico() {
     if (totalServicos >= MAX_SERVICOS) {
         printf(">> Limite de %d servicos atingido.\n", MAX_SERVICOS);
         return;
+        salvarServicos();
+        exportarJson();
     }
 
     s = &servicos[totalServicos];
@@ -498,6 +504,8 @@ void registrarAtendimento() {
     if (posAnimal < 0) {
         printf(">> Animal nao encontrado.\n");
         return;
+        salvarAtendimentos();
+        exportarJson();
     }
 
     printf("ID do servico: ");
@@ -682,6 +690,101 @@ void faturamento() {
 }
 
 /* ============================================================
+   EXPORTAR JSON
+   Escreve todos os dados em dados_clinica.json.
+   ============================================================ */
+
+/* Escreve uma string entre aspas, escapando caracteres especiais do JSON */
+void escreverJsonString(FILE *f, const char *s) {
+    fputc('"', f);
+    for (; *s; s++) {
+        switch (*s) {
+            case '"':  fputs("\\\"", f); break;
+            case '\\': fputs("\\\\", f); break;
+            case '\n': fputs("\\n", f);  break;
+            case '\r': fputs("\\r", f);  break;
+            case '\t': fputs("\\t", f);  break;
+            default:   fputc(*s, f);
+        }
+    }
+    fputc('"', f);
+}
+
+/* Escreve a data AAAAMMDD como "AAAA-MM-DD" */
+void escreverJsonData(FILE *f, int data) {
+    fprintf(f, "\"%04d-%02d-%02d\"", data / 10000, (data / 100) % 100, data % 100);
+}
+
+/* ---------- OPCAO 9: exportar JSON ---------- */
+void exportarJson() {
+    FILE *f;
+    int i, posServico;
+    Animal *a;
+    Servico *s;
+    Atendimento *t;
+
+    f = fopen("site/dados_clinica.json", "w");
+    if (f == NULL) {
+        printf(">> Erro ao criar dados_clinica.json\n");
+        return;
+    }
+
+    /* ---------- animais ---------- */
+    fprintf(f, "{\n  \"animais\": [\n");
+    for (i = 0; i < totalAnimais; i++) {
+        a = &animais[i];
+        fprintf(f, "    {\n");
+        fprintf(f, "      \"id\": %d,\n", a->id);
+        fprintf(f, "      \"nome\": ");     escreverJsonString(f, a->nome);     fprintf(f, ",\n");
+        fprintf(f, "      \"especie\": ");  escreverJsonString(f, a->especie);  fprintf(f, ",\n");
+        fprintf(f, "      \"raca\": ");     escreverJsonString(f, a->raca);     fprintf(f, ",\n");
+        fprintf(f, "      \"idade\": %d,\n", a->idade);
+        fprintf(f, "      \"tutor\": ");    escreverJsonString(f, a->tutor);    fprintf(f, ",\n");
+        fprintf(f, "      \"telefone\": "); escreverJsonString(f, a->telefone); fprintf(f, "\n");
+        fprintf(f, "    }%s\n", (i < totalAnimais - 1) ? "," : "");
+    }
+    fprintf(f, "  ],\n");
+
+    /* ---------- servicos ---------- */
+    fprintf(f, "  \"servicos\": [\n");
+    for (i = 0; i < totalServicos; i++) {
+        s = &servicos[i];
+        fprintf(f, "    {\n");
+        fprintf(f, "      \"id\": %d,\n", s->id);
+        fprintf(f, "      \"nome\": "); escreverJsonString(f, s->nome); fprintf(f, ",\n");
+        fprintf(f, "      \"preco\": %.2f\n", s->preco);
+        fprintf(f, "    }%s\n", (i < totalServicos - 1) ? "," : "");
+    }
+    fprintf(f, "  ],\n");
+
+    /* ---------- atendimentos ---------- */
+    fprintf(f, "  \"atendimentos\": [\n");
+    for (i = 0; i < totalAtendimentos; i++) {
+        t = &atendimentos[i];
+        posServico = buscarServico(t->idServico);
+
+        fprintf(f, "    {\n");
+        fprintf(f, "      \"id\": %d,\n", t->id);
+        fprintf(f, "      \"id_animal\": %d,\n", t->idAnimal);
+        fprintf(f, "      \"id_servico\": %d,\n", t->idServico);
+        fprintf(f, "      \"data\": "); escreverJsonData(f, t->data); fprintf(f, ",\n");
+        fprintf(f, "      \"descricao\": ");   escreverJsonString(f, t->descricao);   fprintf(f, ",\n");
+        fprintf(f, "      \"veterinario\": "); escreverJsonString(f, t->veterinario); fprintf(f, ",\n");
+        if (posServico >= 0) {
+            fprintf(f, "      \"servico\": "); escreverJsonString(f, servicos[posServico].nome); fprintf(f, ",\n");
+            fprintf(f, "      \"preco\": %.2f\n", servicos[posServico].preco);
+        } else {
+            fprintf(f, "      \"servico\": \"(removido)\",\n");
+            fprintf(f, "      \"preco\": 0.00\n");
+        }
+        fprintf(f, "    }%s\n", (i < totalAtendimentos - 1) ? "," : "");
+    }
+    fprintf(f, "  ]\n}\n");
+
+    fclose(f);
+}
+
+/* ============================================================
    MENU PRINCIPAL
    ============================================================ */
 
@@ -692,40 +795,40 @@ void mostrarMenu() {
     printf("3 - Pesquisar animal\n");
     printf("4 - Registrar atendimento\n");
     printf("5 - Registrar servico\n");
-    printf("6 - Consultar historico\n");
+    printf("6 - Consultar historico do animal\n");
     printf("7 - Relatorio de atendimentos\n");
     printf("8 - Faturamento\n");
-    printf("9 - Sair\n");
+    printf("9 - Exportar dados para JSON\n");
+    printf("0 - Sair\n");
+    printf("Opcao: ");
 }
 
 int main() {
     int opcao;
 
-    /* 1. traz os dados gravados nos arquivos para a memoria */
     carregarAnimais();
     carregarServicos();
     carregarAtendimentos();
 
-    /* 2. menu: repete ate o usuario escolher 9 */
     do {
         mostrarMenu();
-        printf("Escolha: ");
         opcao = lerInteiro();
-        if (fimEntrada == 1) break;
+        if (fimEntrada) break;
 
         switch (opcao) {
-            case 1:  cadastrarAnimal();        break;
-            case 2:  listarAnimais();          break;
-            case 3:  pesquisarAnimal();        break;
-            case 4:  registrarAtendimento();   break;
-            case 5:  registrarServico();       break;
-            case 6:  consultarHistorico();     break;
-            case 7:  relatorioAtendimentos();  break;
-            case 8:  faturamento();            break;
-            case 9:  printf("Encerrando...\n"); break;
+            case 1: cadastrarAnimal();       break;
+            case 2: listarAnimais();         break;
+            case 3: pesquisarAnimal();       break;
+            case 4: registrarAtendimento();  break;
+            case 5: registrarServico();      break;
+            case 6: consultarHistorico();    break;
+            case 7: relatorioAtendimentos(); break;
+            case 8: faturamento();           break;
+            case 9: exportarJson();          break;
+            case 0: printf("Ate logo!\n");   break;
             default: printf(">> Opcao invalida.\n");
         }
-    } while (opcao != 9);
+    } while (opcao != 0);
 
     return 0;
 }

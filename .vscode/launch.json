@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug",
+      "cwd": "c:/Users/Gabriel Andrade/OneDrive/Desktop/PROJETO_ADS/VetCare/infraestrutura",
+      "program": "c:/Users/Gabriel Andrade/OneDrive/Desktop/PROJETO_ADS/VetCare/infraestrutura/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

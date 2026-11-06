@@ -1,5 +1,15 @@
 # Projeto - VetCare (clínica veterinária)
 
+# Exigências do projeto 
+
+-----------------------------------------------------------
+## Rodinei -> subir o site em um servidor IIS ou Apache
+-----------------------------------------------------------
+## Paulo -> Back-end em C, implementação em JSON
+-----------------------------------------------------------
+## Tanizaka -> HTML, CSS, JavaScript
+-----------------------------------------------------------
+
 [Como o site da clínica funcionaria e como resolveria problemas e quais seriam eles?]
 
 ---
