@@ -1,6 +1,5 @@
 /* ==========================================================
-   home.css - estilos da página Home (index.html)
-    CSS só do Home
+   Só mexe na Home.
    ========================================================== */
 
 .home-container {
@@ -8,4 +7,141 @@
   max-width: 1120px;
   margin-inline: auto;
   padding-inline: 1.5rem;
+}
+
+/* ---------- Hero ---------- */
+.home-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-hero__conteudo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  min-height: 34rem;
+  padding-block: 4rem;
+}
+
+.home-hero__texto {
+  max-width: 30rem;
+  animation: home-subir 0.7s ease-out both;
+}
+
+.home-hero__titulo {
+  margin: 0 0 1.25rem;
+  font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--cor-azul);
+}
+
+.home-hero__destaque {
+  color: var(--cor-verde-escuro);
+}
+
+.home-hero__subtitulo {
+  margin: 0 0 2rem;
+  font-size: 1.15rem;
+  color: var(--cor-texto-suave);
+}
+
+.home-hero__botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+/* ---------- Botões da Home ---------- */
+.home-botao {
+  display: inline-block;
+  padding: 0.85rem 1.6rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.home-botao:hover {
+  transform: translateY(-2px);
+}
+
+.home-botao--primario {
+  background: var(--cor-azul);
+  color: var(--cor-branco);
+}
+.home-botao--primario:hover {
+  background: var(--cor-azul-medio);
+}
+
+.home-botao--secundario {
+  border-color: var(--cor-verde);
+  color: var(--cor-azul);
+}
+.home-botao--secundario:hover {
+  background: var(--cor-verde-claro);
+}
+
+/* ---------- Imagem do Hero ---------- */
+/* No computador: ocupa a metade direita e se dissolve no fundo, à esquerda */
+.home-hero__midia {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 50%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 50%);
+}
+
+.home-hero__imagem {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Espaço provisório, até a foto ser escolhida */
+.home-hero__placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--cor-verde-claro), #b9d9ea);
+  color: var(--cor-azul-medio);
+  font-size: 0.95rem;
+}
+
+/* ---------- Animação ---------- */
+@keyframes home-subir {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero__texto { animation: none; }
+  .home-botao { transition: none; }
+  .home-botao:hover { transform: none; }
+}
+
+/* ---------- Celular e tablet ---------- */
+@media (max-width: 960px) {
+  .home-hero__conteudo {
+    min-height: 0;
+    padding-block: 3rem 1.5rem;
+  }
+  .home-hero__texto {
+    max-width: none;
+  }
+  /* A imagem desce para baixo do texto e se dissolve de cima para baixo */
+  .home-hero__midia {
+    position: relative;
+    width: 100%;
+    height: 18rem;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
+  }
 }

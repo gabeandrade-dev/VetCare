@@ -7,6 +7,7 @@
 
 <link rel="stylesheet" href="css/padrao.css">
 <link rel="stylesheet" href="css/topo.css">
+<link rel="stylesheet" href="css/rodape.css">
 <link rel="stylesheet" href="css/home.css">
 </head>
 <body>
@@ -14,14 +15,35 @@
   <header class="topo" data-include="components/header.html"></header>
 
   <main>
-    <!-- Provisório: só para testar o topo. A Home de verdade entra nas próximas partes. -->
-    <section class="home-container" style="padding-block: 6rem; min-height: 120vh;">
-      <h1>Home em construção</h1>
-      <p>Role a página para testar o topo fixo e redimensione a janela para testar o menu no celular.</p>
-      <p> Testando, se posso colocar texto aqui</p>
-    </section>
-  </main>
 
+  <!-- Hero -->
+  <section class="home-hero" aria-labelledby="home-hero-titulo">
+    <div class="home-container home-hero__conteudo">
+      <div class="home-hero__texto">
+        <h1 class="home-hero__titulo" id="home-hero-titulo">
+          Cuidado de verdade para <span class="home-hero__destaque">todas as espécies</span>
+        </h1>
+        <p class="home-hero__subtitulo">
+          Atendimento veterinário com carinho e profissionalismo para cães, gatos e outros animais.
+        </p>
+        <div class="home-hero__botoes">
+          <a href="servicos.html" class="home-botao home-botao--primario">Conheça nossos serviços</a>
+          <a href="cadastro.html" class="home-botao home-botao--secundario">Cadastre seu animal</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="home-hero__midia">
+      <!-- PROVISÓRIO: quando tiver a foto, apague a div abaixo e use no lugar:
+           <img class="home-hero__imagem" src="img/nome-da-foto.jpg" alt="Descreva o que aparece na foto"> -->
+      <div class="home-hero__placeholder" role="img" aria-label="Espaço reservado para a imagem de destaque">
+        <span>Espaço da imagem do Hero</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+  <footer class="rodape" data-include="components/footer.html"></footer>
   <script src="js/include.js" defer></script>
   <script src="js/menu.js" defer></script>
 </body>

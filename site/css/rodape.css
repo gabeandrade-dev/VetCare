@@ -1,0 +1,123 @@
+/* ==========================================================
+   rodape.css - rodapé do site (compartilhado)
+
+   AUTOSSUFICIENTE, como o topo.css: não depende do CSS de
+   nenhuma página. Tudo usa o prefixo "rodape" / "--rodape-".
+   ========================================================== */
+
+.rodape {
+  /* Cores e fonte do rodapé (ficam só aqui dentro) */
+  --rodape-fundo: #0e3b5c;
+  --rodape-fundo-escuro: #0a2d46;
+  --rodape-texto: #d6e4ec;
+  --rodape-titulo: #ffffff;
+  --rodape-verde: #5cc48b;
+  --rodape-borda: rgba(255, 255, 255, 0.14);
+  --rodape-fonte: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+
+  background: var(--rodape-fundo);
+  color: var(--rodape-texto);
+  font-family: var(--rodape-fonte);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* Reset local: só vale dentro do rodapé */
+.rodape,
+.rodape *,
+.rodape *::before,
+.rodape *::after {
+  box-sizing: border-box;
+}
+.rodape ul,
+.rodape li,
+.rodape p {
+  margin: 0;
+  padding: 0;
+}
+.rodape ul { list-style: none; }
+
+/* Colunas */
+.rodape__container {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 3rem;
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding: 3.5rem 1.5rem 2.5rem;
+}
+
+/* Marca */
+.rodape__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--rodape-titulo);
+  text-decoration: none;
+}
+.rodape__logo-icone { display: block; width: 34px; height: 34px; }
+.rodape__logo-care { color: var(--rodape-verde); }
+.rodape__texto { max-width: 32ch; }
+
+/* Títulos e listas */
+.rodape__titulo {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--rodape-titulo);
+}
+.rodape__coluna li + li { margin-top: 0.5rem; }
+
+/* Links */
+.rodape a {
+  color: var(--rodape-texto);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.rodape a:hover {
+  color: var(--rodape-titulo);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.rodape a:focus-visible {
+  outline: 3px solid var(--rodape-verde);
+  outline-offset: 3px;
+}
+
+/* Faixa de baixo */
+.rodape__base {
+  background: var(--rodape-fundo-escuro);
+  border-top: 1px solid var(--rodape-borda);
+  font-size: 0.85rem;
+}
+.rodape__container--base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding-block: 1.25rem;
+}
+
+/* Respeita quem prefere menos animação */
+@media (prefers-reduced-motion: reduce) {
+  .rodape a { transition: none; }
+}
+
+/* Celular e tablet pequeno */
+@media (max-width: 760px) {
+  .rodape__container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-top: 2.5rem;
+  }
+  .rodape__container--base {
+    flex-direction: column;
+    padding-top: 1.25rem;
+  }
+}
