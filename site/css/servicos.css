@@ -1,0 +1,219 @@
+/* ==========================================================
+   servicos.css - página de Serviços da VetCare
+
+   AUTOSSUFICIENTE: não depende do CSS de nenhuma outra página.
+   As cores vêm do :root de padrao.css (já incluído na página).
+   O visual dos cards é inspirado nos cards da página Quem Somos,
+   mas encolhidos (2 colunas x 4 fileiras).
+   ========================================================== */
+
+/* ---------- Container da seção (igual ao .home-container) ---------- */
+.servicos-container {
+  width: 100%;
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* ---------- Cabeçalho da página ---------- */
+.servicos-hero {
+  padding-block: 4.5rem 3rem;
+}
+
+.servicos-cabecalho {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 40rem;
+}
+
+/* Rótulo pequeno com linha verde à esquerda (mesmo estilo do home-rotulo) */
+.servicos-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-verde-escuro);
+}
+.servicos-rotulo::before {
+  content: "";
+  width: 2rem;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--cor-verde);
+}
+
+.servicos-titulo {
+  margin: 0 0 1rem;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--cor-azul);
+}
+/* Linha verde debaixo do título (como na página Quem Somos) */
+.servicos-titulo::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--cor-verde);
+  margin: 14px auto 0;
+}
+
+.servicos-subtexto {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--cor-texto-suave);
+}
+
+/* ---------- Grade de serviços: 4 colunas x 2 fileiras ---------- */
+.servicos-grade {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+/* ---------- Card de serviço (sem sombra; a animação entra no hover) ---------- */
+.servico-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--cor-branco);
+  border-radius: 14px;
+  padding: 1.15rem 1rem 1.35rem;
+  border-top: 5px solid var(--cor-verde);
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+              border-top-color 0.3s ease;
+}
+/* Animação ao passar o ponteiro: sobe 8px (como o card do Quem Somos) e a barra verde sobe de baixo */
+.servico-card:hover {
+  transform: translateY(-8px);
+  border-top-color: var(--cor-verde-escuro);
+}
+/* Barra verde que desliza de baixo para cima no hover */
+.servico-card::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0;
+  background: var(--cor-verde-claro);
+  transition: height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.servico-card:hover::after {
+  height: 6px;
+}
+
+/* Círculo do ícone: 42px */
+.servico-icone {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--cor-verde-claro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin: 0 0 0.85rem;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* O ícone também "pula" um pouco no hover */
+.servico-card:hover .servico-icone {
+  transform: scale(1.1) rotate(-4deg);
+}
+/* Quando trocar por imagem real, entra aqui */
+.servico-icone img {
+  width: 42px;
+  height: 42px;
+  max-width: 42px;
+  object-fit: contain;
+  display: block;
+}
+
+.servico-card h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cor-azul);
+  transition: color 0.3s ease;
+}
+.servico-card:hover h3 {
+  color: var(--cor-verde-escuro);
+}
+
+.servico-card p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--cor-texto-suave);
+  line-height: 1.45;
+  max-width: 20ch;
+}
+
+/* ---------- Chamada final (agendamento) ---------- */
+.servicos-cta {
+  text-align: center;
+  padding: 3.5rem 1.5rem 4.5rem;
+}
+
+.servicos-cta p {
+  margin: 0 0 1.5rem;
+  font-size: 1.05rem;
+  color: var(--cor-texto-suave);
+}
+
+.servicos-botao {
+  display: inline-block;
+  padding: 0.95rem 2.2rem;
+  background: var(--cor-azul);
+  color: var(--cor-branco);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.servicos-botao:hover {
+  background: var(--cor-azul-medio);
+  transform: translateY(-2px);
+}
+
+/* Respeita quem prefere menos animação */
+@media (prefers-reduced-motion: reduce) {
+  .servico-card,
+  .servico-icone,
+  .servico-card::after,
+  .servicos-botao {
+    transition: none;
+  }
+  .servico-card:hover,
+  .servico-card:hover .servico-icone,
+  .servico-card:hover::after,
+  .servicos-botao:hover {
+    transform: none;
+  }
+}
+
+/* ---------- Celular e tablet ---------- */
+@media (max-width: 960px) {
+  .servicos-hero {
+    padding-block: 3rem 1.5rem;
+  }
+  /* 4 colunas não cabem; passa para 2 */
+  .servicos-grade {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .servicos-grade {
+    grid-template-columns: 1fr;
+  }
+}
