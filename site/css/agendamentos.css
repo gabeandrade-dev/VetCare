@@ -1,0 +1,318 @@
+/* ==========================================================
+   agendamentos.css - página de agendamentos da VetCare
+   ========================================================== */
+
+.agendamentos-hero {
+  padding-block: 3.5rem 2rem;
+}
+
+.agendamentos-container {
+  width: 100%;
+  max-width: 860px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.agendamentos-cabecalho {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 40rem;
+}
+
+.agendamentos-rotulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-verde-escuro);
+}
+.agendamentos-rotulo::before {
+  content: "";
+  width: 2rem;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--cor-verde);
+}
+
+.agendamentos-titulo {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--cor-azul);
+}
+
+.agendamentos-subtexto {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--cor-texto-suave);
+}
+.agendamentos-subtexto a {
+  color: var(--cor-azul-medio);
+  font-weight: 600;
+  text-decoration: none;
+}
+.agendamentos-subtexto a:hover {
+  text-decoration: underline;
+}
+
+/* Card do formulário */
+.agendamento-card {
+  background: var(--cor-branco);
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(14, 59, 92, 0.08);
+  border-top: 5px solid var(--cor-verde);
+  margin-bottom: 3rem;
+}
+
+.agendamento-servico {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--cor-verde-claro);
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--cor-borda);
+}
+
+.agendamento-servico-rotulo {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+  text-transform: uppercase;
+}
+
+.agendamento-servico-nome {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cor-azul);
+  flex: 1;
+  margin-inline: 1rem;
+}
+
+.agendamento-link {
+  background: none;
+  border: none;
+  color: var(--cor-azul);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+}
+.agendamento-link:hover {
+  text-decoration: underline;
+}
+
+.agendamento-fieldset {
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.agendamento-fieldset legend {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--cor-azul);
+  padding-inline: 0.5rem;
+}
+
+.agendamento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.campo.full {
+  grid-column: 1 / -1;
+}
+
+.campo label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cor-azul);
+}
+
+.campo .req {
+  color: #c0392b;
+}
+
+.campo input,
+.campo textarea,
+.campo select {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--cor-texto);
+  background: var(--cor-branco);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus {
+  outline: none;
+  border-color: var(--cor-verde);
+  box-shadow: 0 0 0 3px rgba(63, 166, 107, 0.2);
+}
+
+.campo small {
+  font-size: 0.8rem;
+  color: var(--cor-texto-suave);
+}
+
+.agendacoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  padding: 0.8rem 1.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-primario {
+  background: var(--cor-azul);
+  color: var(--cor-branco);
+}
+.btn-primario:hover {
+  background: var(--cor-azul-medio);
+}
+
+.btn-limpar {
+  background: var(--cor-branco);
+  color: var(--cor-azul);
+  border: 1px solid var(--cor-borda);
+}
+.btn-limpar:hover {
+  background: var(--cor-fundo);
+}
+
+/* Mensagem de feedback */
+#msgAgendamento {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: none;
+}
+#msgAgendamento.sucesso {
+  display: block;
+  background: #e3f3ea;
+  color: var(--cor-verde-escuro);
+  border: 1px solid var(--cor-verde);
+}
+#msgAgendamento.erro {
+  display: block;
+  background: #fdecea;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+}
+
+/* Seção de lista de agendamentos */
+.agendamentos-lista-secao {
+  margin-bottom: 4rem;
+}
+
+.agendamentos-lista-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid var(--cor-borda);
+  padding-bottom: 0.5rem;
+}
+
+.agendamentos-lista-cabecalho h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--cor-azul);
+  margin: 0;
+}
+
+.agendamentos-lista-cabecalho p {
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+  margin: 0;
+}
+
+.agendamento-card-item {
+  background: var(--cor-branco);
+  border-radius: 10px;
+  border: 1px solid var(--cor-borda);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.agendamento-info h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1.1rem;
+  color: var(--cor-azul);
+}
+
+.agendamento-info p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}
+
+.agendamento-badge {
+  background: var(--cor-verde-claro);
+  color: var(--cor-verde-escuro);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.agendamento-vazio {
+  text-align: center;
+  padding: 2.5rem;
+  background: var(--cor-branco);
+  border-radius: 10px;
+  border: 1px dashed var(--cor-borda);
+  color: var(--cor-texto-suave);
+}
+
+@media (max-width: 640px) {
+  .agendamento-grid {
+    grid-template-columns: 1fr;
+  }
+  .agendamento-card-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .agendamento-badge {
+    align-self: flex-start;
+  }
+}

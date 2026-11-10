@@ -4,11 +4,11 @@
 void exportarJson();
 
 /* ---------- Limites do sistema ---------- */
-#define MAX_ANIMAIS       10
-#define MAX_SERVICOS      10
-#define MAX_ATENDIMENTOS  10
+#define MAX_ANIMAIS       100
+#define MAX_SERVICOS      100
+#define MAX_ATENDIMENTOS  100
 
-/* ---------- Structs: o formato de cada registro ---------- */
+/* ---------- Structs: o formato de cad1a registro ---------- */
 typedef struct {
     int  id;
     char nome[50];

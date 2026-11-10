@@ -4,93 +4,93 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Serviços | VetCare</title>
-
   <link rel="stylesheet" href="css/padrao.css">
   <link rel="stylesheet" href="css/topo.css">
   <link rel="stylesheet" href="css/servicos.css">
 </head>
 <body>
 
+  <link rel="stylesheet" href="css/rodape.css">
   <header class="topo" data-include="components/header.html"></header>
 
   <main>
 
-    <!-- Cabeçalho da página -->
     <section class="servicos-hero">
       <div class="servicos-container">
         <div class="servicos-cabecalho">
           <p class="servicos-rotulo">O que a VetCare oferece</p>
           <h1 class="servicos-titulo">Serviços</h1>
           <p class="servicos-subtexto">
-            Atendimentos e cuidados veterinários para que seu animal receba o melhor, do exame de rotina à emergência.
+            Atendimentos e cuidados veterinários para que seu animal receba o melhor, do exame de rotina à emergência. Clique em um serviço para agendar.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Grade de serviços: 2 colunas x 4 fileiras -->
+
     <section class="servicos-container">
       <div class="servicos-grade">
 
-        <div class="servico-card">
+        <a href="agendamentos.html?servico=consulta-veterinaria" class="servico-card" style="text-decoration: none;">
           <div class="servico-icone">🩺</div>
           <h3>Consulta Veterinária</h3>
           <p>Atendimento clínico geral, avaliação de sintomas, exame físico e orientações de cuidado.</p>
-        </div>
+        </a>
 
-        <div class="servico-card">
+        <a href="agendamentos.html?servico=exames-laboratoriais" class="servico-card" style="text-decoration: none;">
           <div class="servico-icone">🔬</div>
           <h3>Exames Laboratoriais</h3>
           <p>Análises de sangue, urina e fezes para avaliar a saúde do animal.</p>
-        </div>
+        </a>
 
-        <div class="servico-card">
+        <a href="agendamentos.html?servico=exames-de-imagem" class="servico-card" style="text-decoration: none;">
           <div class="servico-icone">📷</div>
           <h3>Exames de Imagem</h3>
           <p>Radiografia e ultrassonografia para diagnóstico por imagem.</p>
-        </div>
+        </a>
 
-        <div class="servico-card">
+        <a href="agendamentos.html?servico=vacinacao" class="servico-card" style="text-decoration: none;">
           <div class="servico-icone">💉</div>
           <h3>Vacinação</h3>
           <p>Antirábica, polivalente, gripes e esquemas personalizados.</p>
-        </div>
+        </a>
 
-        <div class="servico-card">
+        <a href="agendamentos.html?servico=cirurgia" class="servico-card" style="text-decoration: none;">
           <div class="servico-icone">👨‍⚕️</div>
           <h3>Cirurgia</h3>
           <p>Cirurgia geral e ortopédica com pré e pós-operatório.</p>
-        </div>
+        </a>
 
-        <div class="servico-card">
+        <a href="agendamentos.html?servico=pronto-atendimento-24h" class="servico-card" style="text-decoration: none;">
           <div class="servico-icone">🚑</div>
           <h3>Pronto Atendimento 24h</h3>
           <p>Emergências e urgentes com atenção imediata.</p>
-        </div>
+        </a>
 
-        <div class="servico-card">
+        <a href="agendamentos.html?servico=internamento" class="servico-card" style="text-decoration: none;">
           <div class="servico-icone">🛏️</div>
           <h3>Internamento</h3>
           <p>Hospitalização com monitoramento e cuidados adequados.</p>
-        </div>
+        </a>
 
-        <div class="servico-card">
+        <a href="agendamentos.html?servico=consulta-especializada" class="servico-card" style="text-decoration: none;">
           <div class="servico-icone">👨‍⚕️</div>
           <h3>Consulta Especializada</h3>
           <p>Dermatologia, cardiologia, oftalmologia e outras áreas.</p>
-        </div>
+        </a>
 
       </div>
     </section>
 
     <!-- Chamada para agendamento -->
     <section class="servicos-container servicos-cta">
-      <p>Quer agendar um atendimento? Fale conosco pelo WhatsApp ou por telefone e nossa equipe te ajuda.</p>
+      <p>Quer agendar um atendimento? Escolha um dos serviços acima ou cadastre seu animal.</p>
       <a href="cadastro.html" class="servicos-botao">Cadastre seu animal</a>
     </section>
 
   </main>
   <script src="js/include.js" defer></script>
   <script src="js/menu.js" defer></script>
+  <footer class="rodape" data-include="components/footer.html"></footer>
 </body>
 </html>
