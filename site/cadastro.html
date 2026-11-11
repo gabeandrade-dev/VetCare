@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="css/topo.css">
     <link rel="stylesheet" href="css/cadastro.css">
     <link rel="stylesheet" href="css/lista.css">
+    <link rel="stylesheet" href="css/rodape.css">
+    <link rel="stylesheet" href="css/lista-card-extra.css">
+
+
 </head>
 
 <body>
@@ -134,20 +138,6 @@
                 </div>
             </fieldset>
 
-            <!-- Vacinas -->
-            <fieldset>
-                <legend>Vacinas</legend>
-                <div class="campo full">
-                    <label>Quais vacinas seu Pet já tomou?</label>
-                    <div class="checks">
-                        <label><input type="checkbox" name="vacinas" value="antirrabica"> Antirrábica</label>
-                        <label><input type="checkbox" name="vacinas" value="polivalente"> Polivalente</label>
-                        <label><input type="checkbox" name="vacinas" value="gripe-canina"> Gripe canina</label>
-                        <label><input type="checkbox" name="vacinas" value="giardia"> Giárdia</label>
-                    </div>
-                </div>
-            </fieldset>
-
             <div class="acoes">
                 <button type="reset" class="btn btn-limpar">Limpar</button>
                 <button type="submit" class="btn btn-primario">Cadastrar</button>
@@ -178,9 +168,11 @@
         </div>
 
     </section>
-
+    <footer class="rodape" data-include="components/footer.html"></footer>
     <script src="js/include.js" defer></script>
     <script src="js/menu.js" defer></script>
+    <script src="js/cadastro.js" defer></script>
+
 </body>
 
 </html>
