@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar - VetCare</title>
+
+  <link rel="stylesheet" href="css/padrao.css">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <main class="login">
+    <div class="login__cartao">
+
+      <div class="login__logo">
+        <svg viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 28S4 20.5 4 12.2A6.7 6.7 0 0 1 16 8a6.7 6.7 0 0 1 12 4.2C28 20.5 16 28 16 28z" fill="#3fa66b"/>
+          <path d="M16 12.5v8M12 16.5h8" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+        <span>Vet<span class="login__logo-care">Care</span></span>
+      </div>
+
+      <h1 class="login__titulo">Entrar</h1>
+      <p class="login__texto" id="login-texto">Escolha como deseja acessar.</p>
+
+      <!-- Passo 1: escolher o tipo de acesso -->
+      <div class="login__perfis" id="login-perfis">
+        <button type="button" class="login__perfil" data-perfil="cliente">
+          <span class="login__perfil-icone">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="9" r="4" fill="currentColor"/>
+              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="login__perfil-texto">
+            <strong>Entrar como cliente</strong>
+            <small>Visão do tutor</small>
+          </span>
+        </button>
+
+        <button type="button" class="login__perfil" data-perfil="admin">
+          <span class="login__perfil-icone">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="9" r="4" fill="currentColor"/>
+              <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="login__perfil-texto">
+            <strong>Entrar como administrador</strong>
+            <small>Inclui o faturamento</small>
+          </span>
+        </button>
+      </div>
+
+      <!-- Passo 2: digitar a senha -->
+      <form class="login__form" id="form-login" novalidate hidden>
+        <p class="login__escolhido">
+          Acessando como <strong id="login-escolhido">cliente</strong>
+          <button type="button" class="login__trocar" id="login-trocar">Trocar</button>
+        </p>
+
+        <label for="senha">Senha</label>
+        <input id="senha" name="senha" type="password" autocomplete="current-password" required>
+
+        <p class="login__erro" id="login-erro" role="alert" hidden>Senha incorreta.</p>
+
+        <button type="submit" class="login__botao">Entrar</button>
+      </form>
+
+      <p class="login__aviso">Login simulado, apenas para a apresentação do projeto.</p>
+
+    </div>
+  </main>
+
+  <script src="js/login.js" defer></script>
+</body>
+</html>
