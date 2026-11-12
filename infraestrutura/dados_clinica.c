@@ -740,7 +740,10 @@ void exportarJson() {
 
     f = fopen("site/dados_clinica.json", "w");
     if (f == NULL) {
-        printf(">> Erro ao criar dados_clinica.json\n");
+        f = fopen("../site/dados_clinica.json", "w");
+    }
+    if (f == NULL) {
+        printf(">> Erro ao criar dados_clinica.json. Verifique se a pasta 'site' existe e se o programa esta sendo executado na raiz do projeto.\n");
         return;
     }
 
@@ -768,7 +771,7 @@ void exportarJson() {
             qtdPetsPorTutor[totalTutores] = 0;
             totalTutores++;
 
-            if (totalTutores > 1) fprintf(f, "    },\n");
+            if (totalTutores > 1) fprintf(f, "      ]\n    },\n");
 
             fprintf(f, "    {\n");
             fprintf(f, "      \"idTutor\": %d,\n", idsTutores[idxTutor]);

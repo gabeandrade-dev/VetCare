@@ -46,7 +46,43 @@ async function iniciar() {
     } else {
       const resposta = await fetch(ARQUIVO_JSON);
       if (!resposta.ok) throw new Error("HTTP " + resposta.status);
-      cadastrosCache = await resposta.json();
+      const dados = await resposta.json();
+
+      // Se o JSON vier no formato do C { "tutores": [...] }, converte para o formato do JS
+      if (dados && dados.tutores && Array.isArray(dados.tutores)) {
+        cadastrosCache = [];
+        dados.tutores.forEach(tutor => {
+          if (tutor.pets && Array.isArray(tutor.pets)) {
+            tutor.pets.forEach(pet => {
+              cadastrosCache.push({
+                id: pet.idPet || pet.id || 0,
+                tutor: {
+                  nome: tutor.nome || "",
+                  cpf: tutor.cpf || "",
+                  telefone: tutor.telefone || "",
+                  endereco: tutor.endereco || ""
+                },
+                pet: {
+                  nome: pet.nome || "",
+                  tipo: pet.especie || "",
+                  idade: pet.idade || 0,
+                  sexo: pet.sexo || "",
+                  peso: pet.peso || 0,
+                  porte: pet.raca || ""
+                },
+                saude: {
+                  temAlergia: pet.temAlergia || "nao",
+                  possuiDoenca: pet.possuiDoenca || "nao",
+                  foiCastrado: pet.foiCastrado || "nao"
+                },
+                dataCadastro: new Date().toISOString()
+              });
+            });
+          }
+        });
+      } else {
+        cadastrosCache = Array.isArray(dados) ? dados : [];
+      }
     }
   } catch (erro) {
     console.error("Não foi possível carregar os dados:", erro);
