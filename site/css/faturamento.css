@@ -7,6 +7,11 @@
   --texto: #0a2d46;
   --texto-suave: #52687a;
   --branco: #ffffff;
+
+  /* espaçamento da tela */
+  --lateral: max(24px, calc((100% - 1200px) / 2)); /* margem lateral, centraliza até 1200px */
+  --espaco-topo: 48px;    /* aumente se o topo ainda cobrir o título */
+  --espaco-rodape: 56px;  /* espaço entre a tabela e o rodapé */
 }
 
 * {
@@ -15,24 +20,26 @@
 
 body {
   margin: 0;
-  padding: 0 16px 16px;
+  padding: 0;
   background: var(--areia);
   color: var(--texto);
   font-family: "Segoe UI", Arial, sans-serif;
 }
 
 h1 {
-  margin: 16px 0 0;
+  margin: var(--espaco-topo) var(--lateral) 0;
   font-size: 32px;
   color: var(--verde-medio);
 }
 
 .sub {
-  margin: 2px 0 18px;
+  margin: 2px var(--lateral) 18px;
   color: var(--texto-suave);
 }
 
 label {
+  display: block;
+  margin: 0 var(--lateral);
   color: var(--texto-suave);
   font-size: 15px;
 }
@@ -57,7 +64,7 @@ input[type="month"]:focus-visible {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 14px;
-  margin: 18px 0;
+  margin: 18px var(--lateral);
 }
 
 .card {
@@ -87,6 +94,7 @@ input[type="month"]:focus-visible {
 
 /* Tabela */
 .wrap {
+  margin: 0 var(--lateral) var(--espaco-rodape);
   overflow-x: auto;
   background: var(--branco);
   border-radius: 12px;
@@ -99,9 +107,13 @@ table {
   border-collapse: collapse;
 }
 
+th,
+td {
+  text-align: left;
+}
+
 th {
   padding: 10px 12px;
-  text-align: left;
   font-size: 15px;
   color: var(--branco);
   background: var(--verde-escuro);

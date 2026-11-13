@@ -16,10 +16,6 @@ const btnAtualizar = document.getElementById("btnAtualizar");
 const inputCpf = document.getElementById("cpfTutor");
 const inputTelefone = document.getElementById("contatoTutor");
 
-/* ==========================================================
-   LEITURA DO JSON
-   ========================================================== */
-const ARQUIVO_JSON = "dados_clinica.json"; // caminho relativo ao cadastro.html
 let cadastrosCache = [];
 
 function carregarCadastros() {
