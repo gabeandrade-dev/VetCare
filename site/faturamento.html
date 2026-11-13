@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faturamento</title>
+  <link rel="stylesheet" href="css/padrao.css">
+  <link rel="stylesheet" href="css/topo.css">
+  <link rel="stylesheet" href="css/rodape.css">
+  <link rel="stylesheet" href="css/faturamento.css">
+</head>
+
+<body>
+
+  <header class="topo" data-include="components/header.html"></header>
+
+  <h1>Faturamento</h1>
+  <p class="sub">Resumo financeiro do mês</p>
+  <label>Mês: <input type="month" id="mes" value="2026-11"></label>
+
+  <div class="cards">
+    <div class="card">
+      <div class="t">Lucro total do mês</div>
+      <div class="v" id="lucro">–</div>
+      <div class="d">Valor cobrado − custos</div>
+    </div>
+    <div class="card">
+      <div class="t">Atendimentos no mês</div>
+      <div class="v" id="qtd">–</div>
+      <div class="d">Total de atendimentos realizados</div>
+    </div>
+    <div class="card">
+      <div class="t">Valor médio por atendimento</div>
+      <div class="v" id="medio">–</div>
+      <div class="d">Valor cobrado ÷ atendimentos</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr><th>Data</th><th>Animal</th><th>Serviço</th><th>Valor</th></tr>
+      </thead>
+      <tbody id="linhas"></tbody>
+    </table>
+    <div class="empty" id="vazio" hidden>Nenhum atendimento neste mês. Escolha outro mês.</div>
+  </div>
+
+  <footer class="rodape" data-include="components/footer.html"></footer>
+  <script src="js/include.js" defer></script>
+  <script src="js/menu.js" defer></script>
+  <script src="js/faturamento.js" defer></script>
+  
+</body>
+</html>
