@@ -68,6 +68,16 @@
         link.setAttribute("aria-current", "page");
       }
     });
+
+    // Esconde links restritos a um perfil (ex.: faturamento = admin,
+    // agendamento = cliente). O atributo data-somente diz qual perfil pode ver.
+    if (sessao && sessao.perfil) {
+      document.querySelectorAll("[data-somente]").forEach((link) => {
+        if (link.getAttribute("data-somente") !== sessao.perfil) {
+          link.parentElement.remove();
+        }
+      });
+    }
   }
 
   /* ---------- Bolinha de perfil ---------- */

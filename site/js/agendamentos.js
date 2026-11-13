@@ -1,6 +1,26 @@
 /* ==========================================================
    agendamentos.js - lógica da página de agendamentos
+   - página restrita a clientes: exige login (o menu.js já
+     redireciona para login.html sem sessão) e bloqueia o
+     administrador, que é redirecionado para a Home.
    ========================================================== */
+
+(function () {
+  const CHAVE_SESSAO = "vetcare_sessao";
+  let sessao = null;
+  try {
+    sessao = JSON.parse(sessionStorage.getItem(CHAVE_SESSAO));
+  } catch (erro) {
+    sessao = null;
+  }
+
+  // Sem sessão: o menu.js já redireciona para o login.
+  // Administrador: agendamento é de responsabilidade do cliente.
+  if (sessao && sessao.perfil === "admin") {
+    location.replace("index.html");
+    return;
+  }
+})();
 
 document.addEventListener("DOMContentLoaded", () => {
   const urlParams = new URLSearchParams(window.location.search);
