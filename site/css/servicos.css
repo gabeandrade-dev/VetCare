@@ -76,7 +76,7 @@
   text-align: center;
   background: var(--cor-branco);
   border-radius: 18px;
-  padding: 30px 24px;
+  padding: 36px 28px;
   border-top: 5px solid var(--cor-verde);
   box-shadow: 0 6px 20px rgba(14, 59, 92, 0.08);
   text-decoration: none !important;
@@ -91,13 +91,13 @@
 
 .servico-card:hover {
   transform: translateY(-12px) !important;
-  box-shadow: 0 15px 35px rgba(14, 59, 92, 0.2) !important;
+  box-shadow: 0 76px 76px rgba(14, 59, 92, 0.2) !important;
 }
 
 /* ÍCONE */
 .servico-icone {
-  width: 64px;
-  height: 64px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   background: var(--cor-verde-claro);
   display: flex;
