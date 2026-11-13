@@ -1,11 +1,9 @@
 /* ==========================================================
    cadastro.js
-   - Salva cada cadastro como JSON (localStorage)
-   - Lê o JSON e mostra os cadastros na tela
+   - Lê SOMENTE o arquivo dados_clinica.json (sem localStorage)
+   - Mostra os cadastros na tela
    - Busca, atualização e exclusão
    ========================================================== */
-
-const CHAVE_STORAGE = "cadastros_pet";
 
 /* ---------- Elementos ---------- */
 const form = document.getElementById("formCadastro");
@@ -18,72 +16,55 @@ const btnAtualizar = document.getElementById("btnAtualizar");
 const inputCpf = document.getElementById("cpfTutor");
 const inputTelefone = document.getElementById("contatoTutor");
 
-/* ==========================================================
-   ARMAZENAMENTO (JSON)
-   Para usar um servidor no futuro, troque apenas estas 2
-   funções por fetch() para a sua API.
-   ========================================================== */
-const ARQUIVO_JSON = "dados_clinica.json"; // caminho relativo ao cadastro.html
 let cadastrosCache = [];
 
 function carregarCadastros() {
   return cadastrosCache;
 }
 
-function salvarCadastros(cadastros) {
-  cadastrosCache = cadastros;
-  localStorage.setItem(CHAVE_STORAGE, JSON.stringify(cadastros, null, 2));
+/* Converte o JSON { "tutores": [...] } para a lista usada na tela */
+function converterDados(dados) {
+  if (dados && Array.isArray(dados.tutores)) {
+    const lista = [];
+    dados.tutores.forEach((tutor) => {
+      (tutor.pets || []).forEach((pet) => {
+        lista.push({
+          id: pet.idPet || pet.id || 0,
+          tutor: {
+            nome: tutor.nome || "",
+            cpf: tutor.cpf || "",
+            telefone: tutor.telefone || "",
+            endereco: tutor.endereco || "",
+          },
+          pet: {
+            nome: pet.nome || "",
+            tipo: pet.especie || "",
+            idade: pet.idade || 0,
+            sexo: pet.sexo || "",
+            peso: pet.peso || 0,
+            porte: pet.raca || "",
+          },
+          saude: {
+            temAlergia: pet.temAlergia || "nao",
+            possuiDoenca: pet.possuiDoenca || "nao",
+            foiCastrado: pet.foiCastrado || "nao",
+          },
+          dataCadastro: pet.dataCadastro || tutor.dataCadastro || "",
+        });
+      });
+    });
+    return lista;
+  }
+  return Array.isArray(dados) ? dados : [];
 }
 
-/* Carrega os dados: primeiro do localStorage (cadastros novos);
-   se estiver vazio, lê o arquivo dados_clinica.json */
+/* Lê o arquivo dados_clinica.json */
 async function iniciar() {
   try {
-    const salvo = localStorage.getItem(CHAVE_STORAGE);
-
-    if (salvo) {
-      cadastrosCache = JSON.parse(salvo);
-    } else {
-      const resposta = await fetch(ARQUIVO_JSON);
-      if (!resposta.ok) throw new Error("HTTP " + resposta.status);
-      const dados = await resposta.json();
-
-      // Se o JSON vier no formato do C { "tutores": [...] }, converte para o formato do JS
-      if (dados && dados.tutores && Array.isArray(dados.tutores)) {
-        cadastrosCache = [];
-        dados.tutores.forEach(tutor => {
-          if (tutor.pets && Array.isArray(tutor.pets)) {
-            tutor.pets.forEach(pet => {
-              cadastrosCache.push({
-                id: pet.idPet || pet.id || 0,
-                tutor: {
-                  nome: tutor.nome || "",
-                  cpf: tutor.cpf || "",
-                  telefone: tutor.telefone || "",
-                  endereco: tutor.endereco || ""
-                },
-                pet: {
-                  nome: pet.nome || "",
-                  tipo: pet.especie || "",
-                  idade: pet.idade || 0,
-                  sexo: pet.sexo || "",
-                  peso: pet.peso || 0,
-                  porte: pet.raca || ""
-                },
-                saude: {
-                  temAlergia: pet.temAlergia || "nao",
-                  possuiDoenca: pet.possuiDoenca || "nao",
-                  foiCastrado: pet.foiCastrado || "nao"
-                },
-                dataCadastro: new Date().toISOString()
-              });
-            });
-          }
-        });
-      } else {
-        cadastrosCache = Array.isArray(dados) ? dados : [];
-      }
-    }
+    // cache: "no-store" garante que o navegador leia o arquivo atualizado
+    const resposta = await fetch(ARQUIVO_JSON, { cache: "no-store" });
+    if (!resposta.ok) throw new Error("HTTP " + resposta.status);
+    cadastrosCache = converterDados(await resposta.json());
   } catch (erro) {
     console.error("Não foi possível carregar os dados:", erro);
     cadastrosCache = [];
@@ -106,7 +87,7 @@ function gerarId(cadastros) {
    MÁSCARAS E VALIDAÇÃO
    ========================================================== */
 function somenteNumeros(valor) {
-  return valor.replace(/\D/g, "");
+  return String(valor).replace(/\D/g, "");
 }
 
 function mascaraCPF(valor) {
@@ -194,7 +175,7 @@ function lerFormulario() {
 }
 
 /* ==========================================================
-   CADASTRAR
+   CADASTRAR (apenas na tela, até recarregar a página)
    ========================================================== */
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -223,7 +204,6 @@ form.addEventListener("submit", (e) => {
   novo.dataCadastro = new Date().toISOString();
 
   cadastros.push(novo);
-  salvarCadastros(cadastros);
 
   form.reset();
   mostrarMensagem(msg, `Cadastro #${novo.id} realizado com sucesso!`);
@@ -365,17 +345,17 @@ listaCards.addEventListener("click", (e) => {
   const id = Number(botao.dataset.id);
   if (!confirm(`Deseja excluir o cadastro #${id}?`)) return;
 
-  const restantes = carregarCadastros().filter((c) => c.id !== id);
-  salvarCadastros(restantes);
+  cadastrosCache = carregarCadastros().filter((c) => c.id !== id);
   renderizarLista();
   mostrarMensagem(msgLista, `Cadastro #${id} excluído.`);
 });
 
 campoBusca.addEventListener("input", renderizarLista);
 
-btnAtualizar.addEventListener("click", () => {
+// Relê o dados_clinica.json
+btnAtualizar.addEventListener("click", async () => {
   campoBusca.value = "";
-  renderizarLista();
+  await iniciar();
   mostrarMensagem(msgLista, "Lista atualizada.");
 });
 
