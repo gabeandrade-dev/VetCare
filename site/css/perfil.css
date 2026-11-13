@@ -1,0 +1,79 @@
+/* ==========================================================
+   perfil.css - página Meu perfil
+   ========================================================== */
+
+.perfil {
+  padding-block: 4rem;
+}
+
+.perfil__container {
+  width: 100%;
+  max-width: 40rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+.perfil__titulo {
+  margin: 0 0 1.5rem;
+  font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--cor-azul);
+}
+
+.perfil__cartao {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.75rem;
+  background: var(--cor-branco);
+  border: 1px solid var(--cor-borda);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(14, 59, 92, 0.06);
+}
+
+.perfil__avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 3px solid var(--cor-verde);
+  border-radius: 50%;
+  background: var(--cor-azul);
+  color: var(--cor-branco);
+}
+.perfil__avatar svg {
+  display: block;
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.perfil__dados {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+}
+.perfil__dados dt {
+  font-size: 0.85rem;
+  color: var(--cor-texto-suave);
+}
+.perfil__dados dd {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cor-azul);
+}
+
+.perfil__aviso {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  color: var(--cor-texto-suave);
+}
+
+@media (max-width: 560px) {
+  .perfil__cartao {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

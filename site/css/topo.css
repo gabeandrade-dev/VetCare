@@ -142,3 +142,100 @@
   .topo__menu ul { flex-direction: column; gap: 0.15rem; }
   .topo__menu a { padding: 0.8rem 1rem; border-radius: 10px; }
 }
+/* ---------- Bolinha de perfil ---------- */
+.topo [hidden] {
+  display: none !important;
+}
+
+.topo__perfil {
+  position: relative;
+  margin-left: 1rem;
+}
+
+.topo__avatar {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: 2px solid var(--topo-verde);
+  border-radius: 50%;
+  background: var(--topo-azul);
+  font: inherit;
+  color: var(--topo-branco);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.topo__avatar:hover {
+  background: var(--topo-azul-medio);
+}
+.topo__avatar svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.topo__perfil-menu {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  right: 0;
+  z-index: 110;
+  min-width: 12.5rem;
+  padding: 0.5rem;
+  background: var(--topo-branco);
+  border: 1px solid var(--topo-borda);
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(14, 59, 92, 0.16);
+}
+
+.topo__perfil-nome {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 0.35rem;
+  padding: 0.5rem 0.75rem 0.6rem;
+  border-bottom: 1px solid var(--topo-borda);
+  font-size: 0.95rem;
+  color: var(--topo-texto);
+}
+.topo__perfil-nome span {
+  font-size: 0.8rem;
+  color: #4d6070;
+}
+
+.topo__perfil-menu a,
+.topo__sair {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+  color: var(--topo-texto);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.topo__perfil-menu a:hover,
+.topo__sair:hover {
+  background: var(--topo-verde-claro);
+  color: var(--topo-azul);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topo__avatar,
+  .topo__perfil-menu a,
+  .topo__sair { transition: none; }
+}
+
+/* Celular: logo à esquerda, bolinha e botão de menu à direita */
+@media (max-width: 860px) {
+  .topo__perfil {
+    order: 2;
+    margin-left: auto;
+    margin-right: 0.75rem;
+  }
+  .topo__botao { order: 3; }
+}

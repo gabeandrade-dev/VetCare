@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu perfil - VetCare</title>
+
+  <link rel="stylesheet" href="css/padrao.css">
+  <link rel="stylesheet" href="css/topo.css">
+  <link rel="stylesheet" href="css/perfil.css">
+</head>
+<body>
+
+  <header class="topo" data-include="components/header.html"></header>
+
+  <main class="perfil">
+    <div class="perfil__container">
+      <h1 class="perfil__titulo">Meu perfil</h1>
+
+      <div class="perfil__cartao">
+        <div class="perfil__avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="9" r="4" fill="currentColor"/>
+            <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="currentColor"/>
+          </svg>
+        </div>
+        <dl class="perfil__dados">
+          <div>
+            <dt>Nome</dt>
+            <dd id="perfil-nome">-</dd>
+          </div>
+          <div>
+            <dt>Tipo de acesso</dt>
+            <dd id="perfil-tipo">-</dd>
+          </div>
+        </dl>
+      </div>
+
+      <p class="perfil__aviso">Conta de demonstração, criada apenas para a apresentação do projeto.</p>
+    </div>
+  </main>
+
+  <script>
+    // Preenche a página com os dados da sessão (login simulado)
+    (function () {
+      var dados = JSON.parse(sessionStorage.getItem("vetcare_sessao") || "null");
+      if (!dados) return;
+      document.getElementById("perfil-nome").textContent = dados.nome;
+      document.getElementById("perfil-tipo").textContent = dados.perfil === "admin" ? "Administrador" : "Cliente";
+    })();
+  </script>
+  <script src="js/include.js" defer></script>
+  <script src="js/menu.js" defer></script>
+</body>
+</html>
