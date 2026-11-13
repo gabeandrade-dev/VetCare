@@ -50,31 +50,28 @@ body {
   margin: 12px auto 0;
 }
 
-/* ============ QUEM SOMOS (introdução da página) ============ */
-/* ============ QUEM SOMOS (igual ao "O que nos move") ============ */
+/* ============ QUEM SOMOS ============ */
 .quem-somos {
   padding-bottom: 0;
 }
 
-/* título no mesmo tamanho do "O que nos move", com a linha verde embaixo */
 .quem-somos .titulo-secao {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 28px;
 }
 
-/* o texto fica dentro de uma caixa azul */
 .quem-somos .subtitulo-secao {
   max-width: 760px;
   margin: 0 auto;
   padding: 32px 36px;
-  background: var(--verde-escuro);   /* azul principal #0e3b5c */
+  background: var(--verde-escuro);
   color: var(--branco);
   font-size: 1.05rem;
   line-height: 1.8;
   text-align: center;
   border-radius: 18px;
-  border-top: 5px solid var(--laranja);   /* verde #5cc48b, igual aos cards */
+  border-top: 5px solid var(--laranja);
   box-shadow: 0 6px 20px rgba(14, 59, 92, 0.15);
 }
 
@@ -106,7 +103,6 @@ body {
   box-shadow: 0 14px 30px rgba(14, 59, 92, 0.18);
 }
 
-/* bola cinza dos ícones (76px) */
 .card .icone {
   font-size: 2.6rem;
   background: var(--verde-claro);
@@ -120,7 +116,6 @@ body {
   overflow: hidden;
 }
 
-/* imagem dentro do ícone: mesmo tamanho da bola (76px) */
 .card .icone img {
   width: 76px !important;
   height: 76px !important;
@@ -190,17 +185,30 @@ body {
 }
 
 /* ============ EQUIPE ============ */
-.equipe-grid {
+/* Funciona de duas formas:
+   1) com <div class="equipe-grid"> envolvendo os cards (recomendado)
+   2) sem a div: a própria <section class="secao"> vira o grid (:has) */
+
+.equipe-grid,
+.secao:has(> .membro) {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* sem a div: título e subtítulo ocupam a linha toda */
+.secao:has(> .membro) > .titulo-secao,
+.secao:has(> .membro) > .subtitulo-secao {
+  grid-column: 1 / -1;
 }
 
 .membro {
   background: var(--branco);
-  border-radius: 18px;
-  padding: 30px 22px;
+  border-radius: 16px;
+  padding: 20px 14px;
   text-align: center;
+  line-height: 1.4;
+  min-width: 0;
   box-shadow: 0 6px 20px rgba(14, 59, 92, 0.08);
   transition: transform 0.3s ease;
 }
@@ -208,47 +216,48 @@ body {
 .membro:hover { transform: translateY(-6px); }
 
 .membro .foto {
-  width: 110px;
-  height: 110px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--verde-escuro), var(--verde-medio));
   color: var(--branco);
-  font-size: 2.8rem;
+  font-size: 2.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 18px;
-  /* substitua o emoji por uma imagem real:
-     <img src="foto.jpg" style="width:100%;height:100%;border-radius:50%;object-fit:cover"> */
+  margin: 0 auto 12px;
+  overflow: hidden;
 }
 
-.membro h4 { color: var(--verde-escuro); font-size: 1.15rem; }
-.membro span { color: var(--laranja); font-size: 0.9rem; font-weight: 600; }
-.membro p { color: var(--texto-suave); font-size: 0.9rem; margin-top: 10px; }
-
-/* ============ CTA FINAL ============ */
-.cta {
-  background: linear-gradient(135deg, var(--verde-escuro), var(--verde-medio));
-  color: var(--branco);
-  text-align: center;
-  padding: 70px 24px;
+.membro .foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.cta h2 { font-size: 2rem; margin-bottom: 12px; }
-.cta p { opacity: 0.9; margin-bottom: 30px; }
-
-.botao {
-  display: inline-block;
-  background: var(--laranja);
-  color: var(--verde-medio);
-  text-decoration: none;
-  font-weight: 700;
-  padding: 15px 40px;
-  border-radius: 50px;
-  transition: background 0.3s ease, transform 0.3s ease;
+.membro h4 {
+  color: var(--verde-escuro);
+  font-size: 1.05rem;
 }
 
-.botao:hover {
-  background: #4db07a;
-  transform: scale(1.05);
+.membro span {
+  display: block;
+  color: var(--laranja);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.membro p {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  margin-top: 6px;
+}
+
+/* Celular: 1 por linha */
+@media (max-width: 700px) {
+  .equipe-grid,
+  .secao:has(> .membro) {
+    grid-template-columns: 1fr;
+  }
 }

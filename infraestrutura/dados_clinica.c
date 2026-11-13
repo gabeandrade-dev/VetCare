@@ -16,6 +16,7 @@ typedef struct {
     char raca[30];
     int  idade;
     char tutor[60];
+    char cpf[15];
     char telefone[20];
 } Animal;
 
@@ -316,14 +317,14 @@ int buscarServico(int id) {
 /* Recebe um PONTEIRO para um animal e mostra seus dados.
    Com ponteiro de struct usa-se "->" em vez de ".". */
 void mostrarAnimal(Animal *a) {
-    printf("%-4d %-20.20s %-10.10s %-16.16s %-5d %-20.20s %-14.14s\n",
-           a->id, a->nome, a->especie, a->raca, a->idade, a->tutor, a->telefone);
+    printf("%-4d %-20.20s %-10.10s %-16.16s %-5d %-18.18s %-14.14s %-14.14s\n",
+           a->id, a->nome, a->especie, a->raca, a->idade, a->tutor, a->cpf, a->telefone);
 }
 
 void cabecalhoAnimais() {
-    printf("\n%-4s %-20s %-10s %-16s %-5s %-20s %-14s\n",
-           "ID", "Nome", "Especie", "Raca", "Idade", "Tutor", "Telefone");
-    printf("---------------------------------------------------------------------------------------\n");
+    printf("\n%-4s %-20s %-10s %-16s %-5s %-18s %-14s %-14s\n",
+           "ID", "Nome", "Especie", "Raca", "Idade", "Tutor", "CPF", "Telefone");
+    printf("---------------------------------------------------------------------------------------------------\n");
 }
 
 /* ---------- OPCAO 1: cadastrar animal ---------- */
@@ -355,13 +356,13 @@ void cadastrarAnimal() {
     }
     printf("Tutor: ");
     lerTexto(a->tutor, sizeof(a->tutor));
+    printf("CPF do Tutor: ");
+    lerTexto(a->cpf, sizeof(a->cpf));
     printf("Telefone: ");
     lerTexto(a->telefone, sizeof(a->telefone));
 
     a->id = totalAnimais + 1;
     totalAnimais++;
-    salvarAnimais();
-    printf(">> Animal cadastrado com ID %d.\n", a->id);
     salvarAnimais();
     exportarJson();
     printf(">> Animal cadastrado com ID %d.\n", a->id);
@@ -449,8 +450,6 @@ void registrarServico() {
     if (totalServicos >= MAX_SERVICOS) {
         printf(">> Limite de %d servicos atingido.\n", MAX_SERVICOS);
         return;
-        salvarServicos();
-        exportarJson();
     }
 
     s = &servicos[totalServicos];
@@ -472,6 +471,7 @@ void registrarServico() {
     s->id = totalServicos + 1;
     totalServicos++;
     salvarServicos();
+    exportarJson();
     printf(">> Servico registrado com ID %d.\n", s->id);
 }
 
@@ -504,8 +504,6 @@ void registrarAtendimento() {
     if (posAnimal < 0) {
         printf(">> Animal nao encontrado.\n");
         return;
-        salvarAtendimentos();
-        exportarJson();
     }
 
     printf("ID do servico: ");
@@ -532,6 +530,7 @@ void registrarAtendimento() {
     at->idServico = idServico;
     totalAtendimentos++;
     salvarAtendimentos();
+    exportarJson();
 
     printf(">> Atendimento %d registrado: %s - %s (R$ %.2f)\n",
            at->id, animais[posAnimal].nome,
@@ -715,72 +714,120 @@ void escreverJsonData(FILE *f, int data) {
     fprintf(f, "\"%04d-%02d-%02d\"", data / 10000, (data / 100) % 100, data % 100);
 }
 
-/* ---------- OPCAO 9: exportar JSON ---------- */
+/* ---------- OPCAO 9: exportar JSON ----------
+   Gera uma estrutura hierarquica:
+   tutores -> pets -> agendamentos
+   O tutor e identificado pelo nome + CPF.
+   Os animais sao agrupados sob o tutor correspondente.
+   Os atendimentos sao aninhados em cada pet (buscando por idAnimal).
+   ============================================================ */
 void exportarJson() {
     FILE *f;
-    int i, posServico;
+    int i, j, k;
+    int posServico;
     Animal *a;
-    Servico *s;
     Atendimento *t;
+
+    /* Controle de tutores ja escritos no JSON */
+    char nomesTutores[MAX_ANIMAIS][60];
+    char cpfsTutores[MAX_ANIMAIS][15];
+    int idsTutores[MAX_ANIMAIS];
+    int totalTutores = 0;
+
+    /* Conta quantos animais cada tutor tem (para fechar os pets corretamente) */
+    int qtdPetsPorTutor[MAX_ANIMAIS];
+    for (k = 0; k < MAX_ANIMAIS; k++) qtdPetsPorTutor[k] = 0;
 
     f = fopen("site/dados_clinica.json", "w");
     if (f == NULL) {
-        printf(">> Erro ao criar dados_clinica.json\n");
+        f = fopen("../site/dados_clinica.json", "w");
+    }
+    if (f == NULL) {
+        printf(">> Erro ao criar dados_clinica.json. Verifique se a pasta 'site' existe e se o programa esta sendo executado na raiz do projeto.\n");
         return;
     }
 
-    /* ---------- animais ---------- */
-    fprintf(f, "{\n  \"animais\": [\n");
+    fprintf(f, "{\n  \"tutores\": [\n");
+
     for (i = 0; i < totalAnimais; i++) {
         a = &animais[i];
-        fprintf(f, "    {\n");
-        fprintf(f, "      \"id\": %d,\n", a->id);
-        fprintf(f, "      \"nome\": ");     escreverJsonString(f, a->nome);     fprintf(f, ",\n");
-        fprintf(f, "      \"especie\": ");  escreverJsonString(f, a->especie);  fprintf(f, ",\n");
-        fprintf(f, "      \"raca\": ");     escreverJsonString(f, a->raca);     fprintf(f, ",\n");
-        fprintf(f, "      \"idade\": %d,\n", a->idade);
-        fprintf(f, "      \"tutor\": ");    escreverJsonString(f, a->tutor);    fprintf(f, ",\n");
-        fprintf(f, "      \"telefone\": "); escreverJsonString(f, a->telefone); fprintf(f, "\n");
-        fprintf(f, "    }%s\n", (i < totalAnimais - 1) ? "," : "");
-    }
-    fprintf(f, "  ],\n");
 
-    /* ---------- servicos ---------- */
-    fprintf(f, "  \"servicos\": [\n");
-    for (i = 0; i < totalServicos; i++) {
-        s = &servicos[i];
-        fprintf(f, "    {\n");
-        fprintf(f, "      \"id\": %d,\n", s->id);
-        fprintf(f, "      \"nome\": "); escreverJsonString(f, s->nome); fprintf(f, ",\n");
-        fprintf(f, "      \"preco\": %.2f\n", s->preco);
-        fprintf(f, "    }%s\n", (i < totalServicos - 1) ? "," : "");
-    }
-    fprintf(f, "  ],\n");
-
-    /* ---------- atendimentos ---------- */
-    fprintf(f, "  \"atendimentos\": [\n");
-    for (i = 0; i < totalAtendimentos; i++) {
-        t = &atendimentos[i];
-        posServico = buscarServico(t->idServico);
-
-        fprintf(f, "    {\n");
-        fprintf(f, "      \"id\": %d,\n", t->id);
-        fprintf(f, "      \"id_animal\": %d,\n", t->idAnimal);
-        fprintf(f, "      \"id_servico\": %d,\n", t->idServico);
-        fprintf(f, "      \"data\": "); escreverJsonData(f, t->data); fprintf(f, ",\n");
-        fprintf(f, "      \"descricao\": ");   escreverJsonString(f, t->descricao);   fprintf(f, ",\n");
-        fprintf(f, "      \"veterinario\": "); escreverJsonString(f, t->veterinario); fprintf(f, ",\n");
-        if (posServico >= 0) {
-            fprintf(f, "      \"servico\": "); escreverJsonString(f, servicos[posServico].nome); fprintf(f, ",\n");
-            fprintf(f, "      \"preco\": %.2f\n", servicos[posServico].preco);
-        } else {
-            fprintf(f, "      \"servico\": \"(removido)\",\n");
-            fprintf(f, "      \"preco\": 0.00\n");
+        /* Procura se o tutor deste animal ja foi adicionado */
+        int idxTutor = -1;
+        for (k = 0; k < totalTutores; k++) {
+            if (strcmp(cpfsTutores[k], a->cpf) == 0 &&
+                strcmp(nomesTutores[k], a->tutor) == 0) {
+                idxTutor = k;
+                break;
+            }
         }
-        fprintf(f, "    }%s\n", (i < totalAtendimentos - 1) ? "," : "");
-    }
-    fprintf(f, "  ]\n}\n");
 
+        /* Se for um tutor novo, abre um novo bloco de tutor */
+        if (idxTutor == -1) {
+            idxTutor = totalTutores;
+            strcpy(nomesTutores[totalTutores], a->tutor);
+            strcpy(cpfsTutores[totalTutores], a->cpf);
+            idsTutores[totalTutores] = totalTutores + 1;
+            qtdPetsPorTutor[totalTutores] = 0;
+            totalTutores++;
+
+            if (totalTutores > 1) fprintf(f, "      ]\n    },\n");
+
+            fprintf(f, "    {\n");
+            fprintf(f, "      \"idTutor\": %d,\n", idsTutores[idxTutor]);
+            fprintf(f, "      \"nome\": ");     escreverJsonString(f, a->tutor);     fprintf(f, ",\n");
+            fprintf(f, "      \"cpf\": ");      escreverJsonString(f, a->cpf);      fprintf(f, ",\n");
+            fprintf(f, "      \"telefone\": "); escreverJsonString(f, a->telefone); fprintf(f, ",\n");
+            fprintf(f, "      \"pets\": [\n");
+        }
+
+        /* Conta quantos pets ja foram escritos para este tutor */
+        int petIndexNoTutor = qtdPetsPorTutor[idxTutor];
+        qtdPetsPorTutor[idxTutor]++;
+
+        /* Escreve o pet atual */
+        if (petIndexNoTutor > 0) {
+            fprintf(f, ",\n");
+        }
+        fprintf(f, "        {\n");
+        fprintf(f, "          \"idPet\": %d,\n", a->id);
+        fprintf(f, "          \"nome\": ");     escreverJsonString(f, a->nome);     fprintf(f, ",\n");
+        fprintf(f, "          \"especie\": ");  escreverJsonString(f, a->especie);  fprintf(f, ",\n");
+        fprintf(f, "          \"raca\": ");     escreverJsonString(f, a->raca);     fprintf(f, ",\n");
+        fprintf(f, "          \"idade\": %d,\n", a->idade);
+        fprintf(f, "          \"agendamentos\": [\n");
+
+        /* Busca todos os atendimentos deste animal */
+        int primeiroAgendamento = 1;
+        for (j = 0; j < totalAtendimentos; j++) {
+            t = &atendimentos[j];
+            if (t->idAnimal != a->id) continue;
+
+            posServico = buscarServico(t->idServico);
+            if (!primeiroAgendamento) fprintf(f, ",\n");
+            primeiroAgendamento = 0;
+
+            fprintf(f, "            {\n");
+            fprintf(f, "              \"idAgendamento\": %d,\n", t->id);
+            fprintf(f, "              \"data\": "); escreverJsonData(f, t->data); fprintf(f, ",\n");
+            if (posServico >= 0) {
+                fprintf(f, "              \"servico\": "); escreverJsonString(f, servicos[posServico].nome); fprintf(f, "\n");
+            } else {
+                fprintf(f, "              \"servico\": \"(removido)\"\n");
+            }
+            fprintf(f, "            }");
+        }
+
+        fprintf(f, "\n          ]\n");
+        fprintf(f, "        }");
+    }
+
+    /* Fecha o ultimo tutor */
+    if (totalTutores > 0) {
+        fprintf(f, "      ]\n    }\n");
+    }
+
+    fprintf(f, "  ]\n}\n");
     fclose(f);
 }
 
