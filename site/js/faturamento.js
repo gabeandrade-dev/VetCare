@@ -139,3 +139,7 @@ document.addEventListener("visibilitychange", () => {
 /* ---------- Inicialização ---------- */
 if (!campoMes.value) campoMes.value = new Date().toISOString().slice(0, 7);
 carregar();
+/* ==========================================================
+   LEITURA DO JSON
+   ========================================================== */
+const ARQUIVO_JSON = "dados_clinica.json"; // caminho relativo ao cadastro.html
