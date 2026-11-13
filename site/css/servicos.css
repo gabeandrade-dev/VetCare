@@ -64,7 +64,7 @@
 /* GRADE */
 .servicos-grade {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1.5rem;
 }
 
@@ -148,6 +148,10 @@
   transform: translateY(-2px);
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
+  .servicos-grade { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 600px) {
   .servicos-grade { grid-template-columns: 1fr; }
 }
