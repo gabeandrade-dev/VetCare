@@ -17,6 +17,7 @@ const elLinhas = document.getElementById("linhas");
 const elVazio = document.getElementById("vazio");
 
 let atendimentosCache = [];
+let primeiraCarga = true;
 
 /* ==========================================================
    LEITURA DO JSON
@@ -26,14 +27,41 @@ function paraNumero(valor) {
   return Number.isFinite(n) ? n : 0;
 }
 
+/* Pega o primeiro campo que existir, entre vários nomes possíveis */
+function pegar(obj, chaves) {
+  for (const chave of chaves) {
+    if (obj[chave] !== undefined && obj[chave] !== null && obj[chave] !== "") {
+      return obj[chave];
+    }
+  }
+  return "";
+}
+
+/* Aceita "AAAA-MM-DD" (com ou sem hora) e "DD/MM/AAAA" -> devolve "AAAA-MM-DD" */
+function normalizarData(valor) {
+  const texto = String(valor ?? "").trim();
+
+  if (/^\d{4}-\d{2}-\d{2}/.test(texto)) return texto.slice(0, 10);
+
+  const br = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+  if (br) return `${br[3]}-${br[2]}-${br[1]}`;
+
+  return "";
+}
+
 function normalizar(a, nomeAnimal) {
   return {
-    animal: nomeAnimal || a.animal || a.nomePet || "—",
-    data: String(a.data ?? a.dataAtendimento ?? "").slice(0, 10), // AAAA-MM-DD
-    servico: a.servico ?? a.tipoServico ?? "",
-    valor: paraNumero(a.valor),
-    custo: paraNumero(a.custo),
+    animal: nomeAnimal || pegar(a, ["animal", "nomePet", "pet"]) || "—",
+    data: normalizarData(pegar(a, ["data", "dataAtendimento", "dataConsulta", "dataHora"])),
+    servico: pegar(a, ["servico", "tipoServico", "procedimento", "descricao"]),
+    valor: paraNumero(pegar(a, ["valor", "preco", "valorCobrado"])),
+    custo: paraNumero(pegar(a, ["custo", "custos"])),
   };
+}
+
+/* Junta várias listas possíveis de um objeto em uma só */
+function listasDe(obj, chaves) {
+  return chaves.flatMap((chave) => (Array.isArray(obj?.[chave]) ? obj[chave] : []));
 }
 
 /* Converte o JSON inteiro em uma lista simples de atendimentos */
@@ -49,15 +77,29 @@ function extrairAtendimentos(dados) {
       nomesPorId[idPet] = pet.nome;
 
       // Formato 1: atendimentos dentro de cada pet
-      (pet.atendimentos || []).forEach((a) => lista.push(normalizar(a, pet.nome)));
+      listasDe(pet, ["atendimentos", "consultas", "historico"]).forEach((a) =>
+        lista.push(normalizar(a, pet.nome))
+      );
     });
   });
 
   // Formato 2: lista de atendimentos na raiz, ligada ao pet pelo idPet
-  const daRaiz = Array.isArray(dados) ? dados : dados?.atendimentos || [];
+  const daRaiz = Array.isArray(dados) ? dados : listasDe(dados, ["atendimentos", "consultas"]);
   daRaiz.forEach((a) => lista.push(normalizar(a, nomesPorId[a.idPet])));
 
-  return lista;
+  // Só mantém atendimentos com data válida
+  return lista.filter((a) => a.data);
+}
+
+/* Na primeira leitura, se o mês atual não tem dados, abre o mês mais recente que tenha */
+function escolherMesInicial() {
+  if (!atendimentosCache.length) return;
+
+  const temNoMes = atendimentosCache.some((a) => a.data.startsWith(campoMes.value));
+  if (temNoMes) return;
+
+  const maisRecente = atendimentosCache.map((a) => a.data).sort().pop();
+  campoMes.value = maisRecente.slice(0, 7);
 }
 
 async function carregar() {
@@ -68,6 +110,11 @@ async function carregar() {
     const dados = await resposta.json();
     atendimentosCache = extrairAtendimentos(dados);
     elVazio.textContent = "Nenhum atendimento neste mês. Escolha outro mês.";
+
+    if (primeiraCarga) {
+      primeiraCarga = false;
+      escolherMesInicial();
+    }
   } catch (erro) {
     console.error("Não foi possível ler o dados_clinica.json:", erro);
     atendimentosCache = [];
@@ -139,7 +186,3 @@ document.addEventListener("visibilitychange", () => {
 /* ---------- Inicialização ---------- */
 if (!campoMes.value) campoMes.value = new Date().toISOString().slice(0, 7);
 carregar();
-/* ==========================================================
-   LEITURA DO JSON
-   ========================================================== */
-const ARQUIVO_JSON = "dados_clinica.json"; // caminho relativo ao cadastro.html

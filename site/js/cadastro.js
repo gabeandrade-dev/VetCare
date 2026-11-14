@@ -1,9 +1,19 @@
 /* ==========================================================
    cadastro.js
    - Formulário de cadastro: disponível para todos (cliente e admin)
+   - Cadastros novos são SALVOS no navegador (localStorage)
    - Lista "Cadastros realizados": SOMENTE para o admin
-   - Lê o arquivo dados_clinica.json (sem localStorage para os dados)
+     (junta o dados_clinica.json + os cadastros salvos)
+   - Admin: busca, atualização e exclusão
    ========================================================== */
+
+/* ---------- Configurações ---------- */
+// Usa ARQUIVO_JSON se ele já existir em outro script; senão usa o padrão.
+const URL_JSON =
+  typeof ARQUIVO_JSON !== "undefined" ? ARQUIVO_JSON : "dados_clinica.json";
+
+// Chave onde ficam salvos os cadastros feitos pelo formulário
+const CHAVE_CADASTROS = "vetcare_cadastros";
 
 /* ---------- Elementos ---------- */
 const form = document.getElementById("formCadastro");
@@ -43,7 +53,27 @@ if (secaoLista) {
 }
 
 /* ==========================================================
-   DADOS
+   CADASTROS SALVOS NO NAVEGADOR (localStorage)
+   ========================================================== */
+function lerSalvos() {
+  try {
+    const lista = JSON.parse(localStorage.getItem(CHAVE_CADASTROS));
+    return Array.isArray(lista) ? lista : [];
+  } catch {
+    return [];
+  }
+}
+
+function gravarSalvos(lista) {
+  localStorage.setItem(CHAVE_CADASTROS, JSON.stringify(lista));
+}
+
+function gerarUid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+/* ==========================================================
+   DADOS (usados pela lista do admin)
    ========================================================== */
 let cadastrosCache = [];
 
@@ -87,18 +117,19 @@ function converterDados(dados) {
   return Array.isArray(dados) ? dados : [];
 }
 
-/* Lê o arquivo dados_clinica.json (somente admin) */
+/* Lê o dados_clinica.json e junta com os cadastros salvos (somente admin) */
 async function iniciar() {
   if (!ehAdmin) return; // cliente não carrega os dados de outros tutores
 
+  let doJson = [];
+
   try {
     // cache: "no-store" garante que o navegador leia o arquivo atualizado
-    const resposta = await fetch(ARQUIVO_JSON, { cache: "no-store" });
+    const resposta = await fetch(URL_JSON, { cache: "no-store" });
     if (!resposta.ok) throw new Error("HTTP " + resposta.status);
-    cadastrosCache = converterDados(await resposta.json());
+    doJson = converterDados(await resposta.json());
   } catch (erro) {
     console.error("Não foi possível carregar os dados:", erro);
-    cadastrosCache = [];
     mostrarMensagem(
       msgLista,
       "Não foi possível ler o dados_clinica.json. Abra a página por um servidor local (ex.: Live Server).",
@@ -106,6 +137,11 @@ async function iniciar() {
     );
   }
 
+  // Cadastros salvos recebem IDs na sequência dos que já existem no JSON
+  let proximoId = gerarId(doJson);
+  const salvos = lerSalvos().map((c) => ({ ...c, id: proximoId++ }));
+
+  cadastrosCache = [...doJson, ...salvos];
   renderizarLista();
 }
 
@@ -207,9 +243,9 @@ function lerFormulario() {
 }
 
 /* ==========================================================
-   CADASTRAR (apenas na tela, até recarregar a página)
+   CADASTRAR (salva no navegador; o admin vê ao clicar em Atualizar)
    ========================================================== */
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const novo = lerFormulario();
@@ -220,9 +256,10 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  const cadastros = carregarCadastros();
+  // Admin compara com a lista completa; cliente compara com o que foi salvo
+  const existentes = ehAdmin ? carregarCadastros() : lerSalvos();
 
-  const cpfDuplicado = cadastros.some(
+  const cpfDuplicado = existentes.some(
     (c) =>
       somenteNumeros(c.tutor.cpf) === somenteNumeros(novo.tutor.cpf) &&
       c.pet.nome.toLowerCase() === novo.pet.nome.toLowerCase()
@@ -232,14 +269,24 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  novo.id = gerarId(cadastros);
+  novo.uid = gerarUid();
   novo.dataCadastro = new Date().toISOString();
 
-  cadastros.push(novo);
+  try {
+    const salvos = lerSalvos();
+    salvos.push(novo);
+    gravarSalvos(salvos);
+  } catch (erro) {
+    console.error("Não foi possível salvar o cadastro:", erro);
+    mostrarMensagem(msg, "Não foi possível salvar o cadastro.", "erro");
+    return;
+  }
 
   form.reset();
-  mostrarMensagem(msg, `Cadastro #${novo.id} realizado com sucesso!`);
-  renderizarLista(); // só atualiza a tela se for admin
+  mostrarMensagem(msg, "Cadastro realizado com sucesso!");
+
+  // Se for admin, a lista já é atualizada na hora
+  if (ehAdmin) await iniciar();
 });
 
 form.addEventListener("reset", () => {
@@ -380,6 +427,13 @@ if (ehAdmin) {
     const id = Number(botao.dataset.id);
     if (!confirm(`Deseja excluir o cadastro #${id}?`)) return;
 
+    const cadastro = carregarCadastros().find((c) => c.id === id);
+
+    // Se foi cadastrado pelo formulário, apaga também do armazenamento
+    if (cadastro && cadastro.uid) {
+      gravarSalvos(lerSalvos().filter((c) => c.uid !== cadastro.uid));
+    }
+
     cadastrosCache = carregarCadastros().filter((c) => c.id !== id);
     renderizarLista();
     mostrarMensagem(msgLista, `Cadastro #${id} excluído.`);
@@ -387,7 +441,7 @@ if (ehAdmin) {
 
   campoBusca.addEventListener("input", renderizarLista);
 
-  // Relê o dados_clinica.json
+  // Relê o dados_clinica.json + cadastros salvos
   btnAtualizar.addEventListener("click", async () => {
     campoBusca.value = "";
     await iniciar();
