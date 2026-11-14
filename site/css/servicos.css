@@ -96,62 +96,65 @@
 
 /* ÍCONE */
 .servico-icone {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  background: var(--cor-verde-claro);
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.8rem;
-  margin-bottom: 18px;
-  transition: transform 0.3s ease;
-}
-.servico-card:hover .servico-icone {
-  transform: scale(1.1) rotate(-4deg);
 }
 
-/* TEXTOS */
-.servico-card h3 {
-  margin: 0 0 10px;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--cor-azul);
-}
-.servico-card:hover h3 {
-  color: var(--cor-verde-escuro);
-}
-.servico-card p {
-  margin: 0;
-  font-size: 0.95rem;
-  color: var(--cor-texto-suave);
-  line-height: 1.6;
+.servico-icone img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* CTA */
 .servicos-cta {
   text-align: center;
-  padding: 4rem 1.5rem;
+  background: var(--cor-branco);
+  border-radius: 18px;
+  border: 1px solid var(--cor-borda);
+  margin-top: 3rem;
+  padding: 40px;
 }
+
+.servicos-cta p {
+  margin: 0 0 1.5rem;
+  font-size: 1.1rem;
+  color: var(--cor-texto-suave);
+}
+
 .servicos-botao {
   display: inline-block;
-  padding: 0.9rem 2.2rem;
-  background: var(--cor-azul);
+  background: var(--cor-verde);
   color: var(--cor-branco);
-  border-radius: 50px;
-  font-weight: 600;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-weight: 700;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: background 0.3s;
 }
+
 .servicos-botao:hover {
-  background: var(--cor-azul-medio);
-  transform: translateY(-2px);
+  background: var(--cor-verde-escuro);
 }
 
-@media (max-width: 900px) {
-  .servicos-grade { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 1200px) {
+  .servicos-grade {
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+  }
 }
 
-@media (max-width: 600px) {
-  .servicos-grade { grid-template-columns: 1fr; }
+@media (max-width: 768px) {
+  .servicos-grade {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .servicos-grade {
+    grid-template-columns: 1fr;
+  }
 }
