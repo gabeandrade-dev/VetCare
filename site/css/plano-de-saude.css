@@ -10,7 +10,17 @@ input:checked + .slider:before { transform: translateX(26px); }
 .container-planos { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: 4rem auto; padding: 0 1rem; }
 .card-plano { background: var(--cor-branco); border: 1px solid var(--cor-borda); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; }
 .card-plano:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-.card-plano.destaque { border: 2px solid var(--cor-verde); transform: scale(1.05); }
+.card-plano.destaque {
+  border: 2px solid var(--cor-verde);
+  transform: scale(1.05);
+  animation: pulse-border 2s infinite ease-in-out;
+}
+
+@keyframes pulse-border {
+  0% { box-shadow: 0 0 0 0 rgba(63, 166, 107, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(63, 166, 107, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(63, 166, 107, 0); }
+}
 .badge-destaque { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--cor-verde); color: white; padding: 0.25rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
 .card-plano h2 { color: var(--cor-azul); margin-bottom: 0.5rem; }
 .card-plano .preco { font-size: 2.5rem; font-weight: bold; color: var(--cor-verde-escuro); margin: 1rem 0; }
