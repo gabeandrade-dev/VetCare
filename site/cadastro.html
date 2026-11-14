@@ -11,8 +11,6 @@
     <link rel="stylesheet" href="css/lista.css">
     <link rel="stylesheet" href="css/rodape.css">
     <link rel="stylesheet" href="css/lista-card-extra.css">
-
-
 </head>
 
 <body>
@@ -147,7 +145,8 @@
         </form>
     </main>
 
-            <section class="container" id="listaCadastros">
+    <!-- Lista de cadastros: visível SOMENTE para o admin (controlado pelo cadastro.js) -->
+    <section class="container" id="listaCadastros" hidden>
 
         <div class="titulo-form">
             <span class="logo">📋</span>
@@ -168,7 +167,9 @@
         </div>
 
     </section>
+
     <footer class="rodape" data-include="components/footer.html"></footer>
+
     <script src="js/include.js" defer></script>
     <script src="js/menu.js" defer></script>
     <script src="js/cadastro.js" defer></script>

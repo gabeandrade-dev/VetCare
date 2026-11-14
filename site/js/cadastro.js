@@ -1,21 +1,50 @@
 /* ==========================================================
    cadastro.js
-   - Lê SOMENTE o arquivo dados_clinica.json (sem localStorage)
-   - Mostra os cadastros na tela
-   - Busca, atualização e exclusão
+   - Formulário de cadastro: disponível para todos (cliente e admin)
+   - Lista "Cadastros realizados": SOMENTE para o admin
+   - Lê o arquivo dados_clinica.json (sem localStorage para os dados)
    ========================================================== */
 
 /* ---------- Elementos ---------- */
 const form = document.getElementById("formCadastro");
 const msg = document.getElementById("msg");
+const inputCpf = document.getElementById("cpfTutor");
+const inputTelefone = document.getElementById("contatoTutor");
+
+/* Elementos da lista (só existem para o admin) */
+const secaoLista = document.getElementById("listaCadastros");
 const msgLista = document.getElementById("msgLista");
 const listaCards = document.getElementById("listaCards");
 const contador = document.getElementById("contador");
 const campoBusca = document.getElementById("busca");
 const btnAtualizar = document.getElementById("btnAtualizar");
-const inputCpf = document.getElementById("cpfTutor");
-const inputTelefone = document.getElementById("contatoTutor");
 
+/* ==========================================================
+   PERFIL DO USUÁRIO
+   ========================================================== */
+function obterPerfil() {
+  try {
+    // Mesma chave e mesmo armazenamento usados no login.js
+    const sessao = JSON.parse(sessionStorage.getItem("vetcare_sessao"));
+    return sessao && sessao.perfil;
+  } catch {
+    return null;
+  }
+}
+
+const ehAdmin = obterPerfil() === "admin";
+
+if (secaoLista) {
+  if (ehAdmin) {
+    secaoLista.hidden = false; // admin vê a lista
+  } else {
+    secaoLista.remove(); // cliente não vê nem recebe a lista no DOM
+  }
+}
+
+/* ==========================================================
+   DADOS
+   ========================================================== */
 let cadastrosCache = [];
 
 function carregarCadastros() {
@@ -58,8 +87,10 @@ function converterDados(dados) {
   return Array.isArray(dados) ? dados : [];
 }
 
-/* Lê o arquivo dados_clinica.json */
+/* Lê o arquivo dados_clinica.json (somente admin) */
 async function iniciar() {
+  if (!ehAdmin) return; // cliente não carrega os dados de outros tutores
+
   try {
     // cache: "no-store" garante que o navegador leia o arquivo atualizado
     const resposta = await fetch(ARQUIVO_JSON, { cache: "no-store" });
@@ -136,6 +167,7 @@ inputTelefone.addEventListener("input", () => {
    MENSAGENS
    ========================================================== */
 function mostrarMensagem(elemento, texto, tipo = "sucesso") {
+  if (!elemento) return;
   elemento.textContent = texto;
   elemento.className = tipo; // "sucesso" ou "erro"
   clearTimeout(elemento._timer);
@@ -207,7 +239,7 @@ form.addEventListener("submit", (e) => {
 
   form.reset();
   mostrarMensagem(msg, `Cadastro #${novo.id} realizado com sucesso!`);
-  renderizarLista();
+  renderizarLista(); // só atualiza a tela se for admin
 });
 
 form.addEventListener("reset", () => {
@@ -216,7 +248,7 @@ form.addEventListener("reset", () => {
 });
 
 /* ==========================================================
-   EXIBIR OS CADASTROS NA TELA
+   EXIBIR OS CADASTROS NA TELA (somente admin)
    ========================================================== */
 function escapar(texto) {
   const div = document.createElement("div");
@@ -314,6 +346,8 @@ function filtrarCadastros(cadastros, termo) {
 }
 
 function renderizarLista() {
+  if (!ehAdmin) return; // cliente não tem lista para renderizar
+
   const todos = carregarCadastros();
   const filtrados = filtrarCadastros(todos, campoBusca.value);
 
@@ -336,28 +370,30 @@ function renderizarLista() {
 }
 
 /* ==========================================================
-   EXCLUIR, BUSCAR E ATUALIZAR
+   EXCLUIR, BUSCAR E ATUALIZAR (somente admin)
    ========================================================== */
-listaCards.addEventListener("click", (e) => {
-  const botao = e.target.closest("[data-acao='excluir']");
-  if (!botao) return;
+if (ehAdmin) {
+  listaCards.addEventListener("click", (e) => {
+    const botao = e.target.closest("[data-acao='excluir']");
+    if (!botao) return;
 
-  const id = Number(botao.dataset.id);
-  if (!confirm(`Deseja excluir o cadastro #${id}?`)) return;
+    const id = Number(botao.dataset.id);
+    if (!confirm(`Deseja excluir o cadastro #${id}?`)) return;
 
-  cadastrosCache = carregarCadastros().filter((c) => c.id !== id);
-  renderizarLista();
-  mostrarMensagem(msgLista, `Cadastro #${id} excluído.`);
-});
+    cadastrosCache = carregarCadastros().filter((c) => c.id !== id);
+    renderizarLista();
+    mostrarMensagem(msgLista, `Cadastro #${id} excluído.`);
+  });
 
-campoBusca.addEventListener("input", renderizarLista);
+  campoBusca.addEventListener("input", renderizarLista);
 
-// Relê o dados_clinica.json
-btnAtualizar.addEventListener("click", async () => {
-  campoBusca.value = "";
-  await iniciar();
-  mostrarMensagem(msgLista, "Lista atualizada.");
-});
+  // Relê o dados_clinica.json
+  btnAtualizar.addEventListener("click", async () => {
+    campoBusca.value = "";
+    await iniciar();
+    mostrarMensagem(msgLista, "Lista atualizada.");
+  });
+}
 
 /* ---------- Inicialização ---------- */
 iniciar();
